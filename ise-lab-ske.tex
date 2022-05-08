@@ -489,10 +489,66 @@
     \end{alertblock}
 \end{frame}
 
-\begin{frame}{Taxonomy of SKE methods}
-    \begin{itemize}
-        \item 
-    \end{itemize}
+\begin{frame}[allowframebreaks]{Plenty of SKE methods from the literature}
+    \input{tables/ske.tex}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Taxonomy of SKE methods}
+    \begin{center}
+        \includegraphics[width=\linewidth]{figures/ske-taxonomy.pdf}
+    \end{center}
+    
+    \framebreak
+
+    \begin{description}
+        \item[target AI task] for the predictor undergoing extraction
+        %
+        \begin{description}
+            \item[classification] i.e., $f: \mathcal{X} \subseteq \mathbb{R}^n \rightarrow \mathcal{Y}$ s.t. $|\mathcal{Y}| = k$
+            \item[regression] i.e., $f: \mathcal{X} \subseteq \mathbb{R}^n \rightarrow \mathcal{Y} \subseteq \mathbb{R}^m$     
+        \end{description} 
+
+        \medskip
+
+        \item[translucency] what kind of ML predictor does the SKE method support?
+        %
+        \begin{description}
+            \item[pedagogical:] any supervised predictor
+            \item[decompositional:] a particular sort of ML predictor (e.g. NN, SVM, DT)      
+        \end{description} 
+
+        \medskip
+
+        \item[input data] supported by the predictor undergoing extraction
+        %
+        \begin{description}
+            \item[binary:] $\mathcal{X} \equiv \{0, 1\}^n$
+            \item[discrete:] $\mathcal{X} \in \{x_1, \ldots, x_n\}^n$   
+            \item[continuous:] $\mathcal{X} \subseteq \mathbb{R}^n$     
+        \end{description} 
+
+        \medskip
+
+        \item[shape] of the extracted knowledge
+        %
+        \begin{description}
+            \item[rule list] i.e. ordered sequences of if-then-else rules
+            \item[decision tree] hierarchical set of if-then-else rules involving a comparison among a variable and a constant   
+            \item[decision table:] TBD
+        \end{description} 
+
+        \medskip
+
+        \item[expressiveness] of the extracted knowledge
+        %
+        \begin{description}
+            \item[propositional] i.e. ordered sequences of if-then-else rules
+            \item[fuzzy] hierarchical set of if-then-else rules involving a comparison among a variable and a constant   
+            \item[oblique] TBD
+            \item[M-of-N] 
+        \end{description} 
+
+    \end{description}
 \end{frame}
 
 \begin{frame}{Examples of methods and their classification}
