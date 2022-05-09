@@ -3,6 +3,9 @@
 \usepackage[font=scriptsize]{caption}
 \usepackage{longtable}
 \usepackage{arydshln}
+\usepackage[margin=20pt]{subfig}
+\usepackage{multirow}
+\usepackage{adjustbox}
 
 \AtBeginSection[]
 {
@@ -22,4 +25,25 @@
     \end{frame}
 }
 
+\newcommand{\functor}[1]{\mathtt{#1}}
+\newcommand{\variable}[1]{\mathit{#1}}
+\newcommand{\predication}[1]{\text{\textit{#1}}}
+\newcommand{\consdot}{\functor{~.~}}
+\newcommand{\fullstop}{\mathtt{.}}
+
+\newcommand{\meta}[1]{\langle\mathit{#1}\rangle}
+\newcommand{\var}[1]{\variable{#1}}
+\newcommand{\const}[1]{\functor{#1}}
+\newcommand{\logicrule}[2]{#1 & \texttt{:-} & #2}
+
+\newcommand{\twopkt}{\textsc{\textsf{2}P-Kt}}
 \newcommand{\lime}{LIME}
+\newcommand{\xai}{XAI}
+\newcommand{\psyke}{PSyKE}
+\newcommand{\real}{\textsc{REAL}}
+\newcommand{\trepan}{\textsc{Trepan}}
+\newcommand{\iter}{\textsc{Iter}}
+\newcommand{\gridex}{GridEx}
+\newcommand{\cart}{\textsc{Cart}}
+\renewcommand{\smile}{Smile}
+\newcommand{\scikit}{Scikit-Learn}

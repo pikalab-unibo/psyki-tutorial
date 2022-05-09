@@ -118,7 +118,7 @@
         
         \vfill
         
-        \item lawmakers recognised citizens' \alert{right} to meaningful \alert{explanations} \ccite{Selbst2017} 
+        \item lawmakers recognised citizens' \alert{right} to meaningful \alert{explanations}\ccite{Selbst2017} 
         %
         \begin{itemize}
             \item about the \alert{logic} behind automated decision making
@@ -453,6 +453,42 @@
     \begin{block}{Definition: Symbolic Knowledge Extraction (SKE)}\centering\itshape
         Any \emph{algorithmic} procedure accepting \emph{trained} sub-symbolic predictors as input and producing \emph{symbolic} knowledge as output, in such a way that the extracted knowledge reflects the behaviour of the predictor with high \emph{fidelity}.
     \end{block}
+
+    \framebreak
+
+    Example:
+    %
+    \begin{columns}
+        \begin{column}{.43\linewidth}
+            \includegraphics[width=\linewidth]{figures/nn-iris.png}
+        \end{column}
+        \hfill
+        $\rightarrow$
+        \hfill
+        \begin{column}{.53\linewidth}\small
+            \[ 
+                \begin{array}{l}
+                    \variable{Class} = \functor{setosa} \leftarrow \variable{PetalWidth} \leq 1.0 \fullstop
+                    \\
+                    \\
+                    \variable{Class} = \functor{versicolor} \leftarrow \variable{PetalLength} > 4.9 \\ 
+                        \qquad  \wedge\ \variable{SepalWidth} \in [2.9,\ 3.2] \fullstop
+                    \\
+                    \variable{Class} = \functor{versicolor} \leftarrow  \variable{PetalWidth} > 1.6 \fullstop
+                    \\
+                    \\
+                    \variable{Class} = \functor{virginica} \leftarrow \variable{SepalWidth} \leq 2.9 \fullstop
+                    \\
+                    \\
+                    \variable{Class} = \functor{virginica} \leftarrow \\ 
+                        \qquad \variable{SepalLength} \in [5.4,\ 6.3] \fullstop
+                    \\
+                    \variable{Class} = \functor{virginica} \leftarrow \\ 
+                        \qquad \variable{PetalWidth} \in [1.0,\ 1.6] \fullstop
+                \end{array}    
+            \]
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{What does `symbolic' actually mean?}
@@ -527,33 +563,70 @@
             \item[continuous:] $\mathcal{X} \subseteq \mathbb{R}^n$     
         \end{description} 
 
-        \medskip
+        \framebreak
 
         \item[shape] of the extracted knowledge
         %
         \begin{description}
-            \item[rule list] i.e. ordered sequences of if-then-else rules
-            \item[decision tree] hierarchical set of if-then-else rules involving a comparison among a variable and a constant   
-            \item[decision table:] TBD
+            \item[rule list:] i.e. ordered sequences of if-then-else rules
+            \item[decision tree:] hierarchical set of if-then-else rules involving a comparison among a variable and a constant   
+            \item[decision table:] 2D tables summarising decisions for each possible assignment of variables
         \end{description} 
 
-        \medskip
+        \framebreak
 
         \item[expressiveness] of the extracted knowledge
         %
         \begin{description}
-            \item[propositional] i.e. ordered sequences of if-then-else rules
-            \item[fuzzy] hierarchical set of if-then-else rules involving a comparison among a variable and a constant   
-            \item[oblique] TBD
-            \item[M-of-N] 
+            \item[propositional:] boolean statements + logic connectives
+            %
+            \begin{itemize}
+                \item there including arithmetic comparisons among variables and constants
+            \end{itemize}
+
+            \item[fuzzy:] hierarchical set of if-then-else rules involving a comparison among a variable and a constant   
+            \item[oblique:] boolean statements + logic connectives + arithmetic comparisons
+            \item[M-of-N:] any of the above + statements like $m-\text{of}-\{\phi_1, \ldots, \phi_n \}$
         \end{description} 
 
     \end{description}
 \end{frame}
 
-\begin{frame}{Examples of methods and their classification}
+\begin{frame}[allowframebreaks]{Examples of methods and their classification}
     \begin{itemize}
-        \item 
+        \item \textbf{CART}:\ccite{breiman1984classification}: classification and regression trees (a.k.a. ``ordinary'' decision trees)
+        %
+        \begin{itemize}
+            \item \textbf{translucency:} pedagogical
+            \item \textbf{target AI task:} classification OR regression
+            \item \textbf{input data:} binary OR discrete OR continuous
+            \item \textbf{shape:} decision tree
+            \item \textbf{expressiveness:} propositional
+        \end{itemize}
+
+        \framebreak
+
+        \item \textbf{Gridex}:\ccite{gridex-extraamas2021} grid extractor
+        %
+        \begin{itemize}
+            \item \textbf{translucency:} pedagogical
+            \item \textbf{target AI task:} regression
+            \item \textbf{input data:} continuous
+            \item \textbf{shape:} rule list
+            \item \textbf{expressiveness:} propositional
+        \end{itemize}
+
+        \framebreak
+
+        \item \textbf{REFANN}:\ccite{setiono2002extraction} rule extraction from function approximating neural networks 
+        %
+        \begin{itemize}
+            \item \textbf{translucency:} decompositional (3-layered NN)
+            \item \textbf{target AI task:} regression
+            \item \textbf{input data:} continuous OR discrete
+            \item \textbf{shape:} rule list
+            \item \textbf{expressiveness:} propositional
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
@@ -561,31 +634,185 @@
 \section{A Platform for Symbolic Knowledge Extraction}
 %===============================================================================
 
-\begin{frame}{Overall Design}
+\begin{frame}[allowframebreaks]
+\frametitle{Overall Design}
+
+    \begin{center}
+        \includegraphics[width=\linewidth]{figures/Psyke.pdf}
+    \end{center}
+
+    \framebreak
+
+    Key components:
+    %
+    \begin{description}
+        \item[extractor:] any entity capable of extracting symbolic knowledge out of symbolic predictors
+        %
+        \begin{itemize}
+            \item possibly, in the form of logic \alert{knowledge bases}
+            \item possibly, leveraging upon the \alert{dataset} the predictor was trained upon \ldots
+            %
+            \begin{itemize}
+                \item possibly, after a \alert{discretization} step
+            \end{itemize}
+            \item \ldots and its \alert{schema}
+        \end{itemize}
+
+        \item[predictor:] some trained classifier/regressor from which knowledge should be extracted
+        
+        \item[discretiser:] any component capable to turn continuous datasets into discrete form, following some strategy
+        
+        \item[logic theory:] outcome of the extraction process
+    \end{description}
+
+    \begin{block}{Unified API for SKI}
+        \begin{itemize}
+            \item 1 interface for \kt{Extractor}, several implementations
+            %
+            \begin{itemize}
+                \item[eg] CART, REAL, GridEx
+            \end{itemize}
+            \item 1 interface for \kt{Discretiser}, several implementations
+            \item 1 interface for \kt{Predictor}, several implementations
+            %
+            \begin{itemize}
+                \item[eg] NN, kNN, DT
+            \end{itemize}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+\frametitle{API Design}
+
+    \begin{center}
+        \includegraphics[width=.9\linewidth]{figures/extractor-api.pdf}
+    \end{center}
+
+    \framebreak
+
+    General assumptions:
+    %
     \begin{itemize}
-        \item 
+        \item underlying ML library (e.g. \scikit{}\ccite{PedregosaVGMTGBPWDVPCBPD11}), providing:
+        %
+        \begin{description}
+            \item[\kt{DataFrame}] a container of tabular data
+            \item[\kt{Predictor<R>}] a computational entity which can be trained (a.k.a.\ fitted) against a \kt{DataFrame} and used to draw predictions of type \kt{R};
+            \item[\kt{Classifier<R>}] a particular case of predictor where \kt{R} represents a type having a finite amount of admissible values;
+            \item[\kt{Regressor<R>}] a particular case of predictor where \kt{R} represents a type having a potentially infinite (possibly continuous) amount of admissible values.
+        \end{description}
+
+        \framebreak
+
+        \item underlying symbolic AI library (e.g. \twopkt{}\ccite{2pkt-swx16}), providing:
+        %
+        \begin{description}
+            \item[\kt{Rule}] a semantic, intelligible representation of the function mapping \kt{Predictor}'s inputs into the corresponding outputs, for a particular portion of the input space;
+            \item[\kt{Theory}] an ordered collection of rules.
+        \end{description}
     \end{itemize}
 \end{frame}
 
-\begin{frame}{API Design}
-    \begin{itemize}
-        \item 
-    \end{itemize}
-\end{frame}
+\begin{frame}[allowframebreaks]{About the Extracted Knowledge}
 
-\begin{frame}{About the extracted knowledge}
+    \begin{block}{Knowledge extracted from \textbf{classifiers}}
+        \begin{equation*}
+            \begin{array}{rcl}
+                \logicrule{\meta{task}(\var{X}_1, \ldots, \var{X}_n, \alert{\const{y}_1})}{p_{1,1}(\bar{\var{X}}),\ \ldots,\ p_{n,1}(\bar{\var{X}})}.
+                \\
+                \logicrule{\meta{task}(\var{X}_1, \ldots, \var{X}_n, \alert{\const{y}_2})}{p_{1,2}(\bar{\var{X}}),\ \ldots,\ p_{n,2}(\bar{\var{X}})}.
+                \\
+                & \vdots
+                \\
+                \logicrule{\meta{task}(\var{X}_1, \ldots, \var{X}_n, \alert{\const{y}_m})}{p_{1,m}(\bar{\var{X}}),\ \ldots,\ p_{n,m}(\bar{\var{X}})}.
+            \end{array}
+        \end{equation*}
+    \end{block}
+
+    \framebreak
+
+    \begin{block}{Knowledge extracted from \textbf{regressors}}
+        \begin{equation*}
+            \begin{array}{rcl}
+                \logicrule{\meta{task}(\var{X}_1, \ldots, \var{X}_n, \var{Y})}{p_{1,1}(\bar{\var{X}}),\ \ldots,\ p_{n,1}(\bar{\var{X}})},
+                \\
+                & & \alert{\var{Y}\ \const{is}\ f_1(\bar{\var{X}})}.
+                \\
+                \logicrule{\meta{task}(\var{X}_1, \ldots, \var{X}_n, \var{Y})}{p_{1,2}(\bar{\var{X}}),\ \ldots,\ p_{n,2}(\bar{\var{X}})},
+                \\
+                & & \alert{\var{Y}\ \const{is}\ f_2(\bar{\var{X}})}.
+                \\
+                & \vdots
+                \\
+                \logicrule{\meta{task}(\var{X}_1, \ldots, \var{X}_n, \var{Y})}{p_{1,m}(\bar{\var{X}}),\ \ldots,\ p_{n,m}(\bar{\var{X}})},
+                \\
+                & & \alert{\var{Y}\ \const{is}\ f_m(\bar{\var{X}})}.
+            \end{array}
+        \end{equation*}
+    \end{block}
+
+    \framebreak
+
+    \ldots where:
+    %
     \begin{itemize}
-        \item classification problems
-        \item regression problems
+        \item $\mathit{task}$ is the $(n+1)$-ary relation representing the classification or regression task at hand,
+        \medskip
+        \item each $\var{X}_i$ is a logic variable named after the $i^\mathit{th}$ input attribute of the currently available data set,
+        \medskip
+        \item $\bar{\var{X}}$ is the $n$-nuple $\var{X}_1, \ldots, \var{X}_n$,
+        \medskip
+        \item each $p_{i,j}$ is either a $n$-ary predicate expressing some constraint about one, two or more variables, or the \pl{true} literal---which can be omitted,
+        \medskip
+        \item $\const{y}_i$ is the output of the $i^{th}$ prediction rule,
+        \medskip
+        \item $f_j$ is an $n$-ary function computing the output value for the regression task in the particular portion of the input space handled by the $j^\mathit{th}$ rule, and
+        \medskip
+        \item $\var{is/2}$ is the well-known Prolog predicate aimed at evaluating functions.
     \end{itemize}
+
+    \framebreak
+
+    \begin{block}{Underlying assumptions}
+        \begin{enumerate}
+            \item the input space is \alert{partitioned} into a finite set of regions
+
+            \item each region is \alert{assigned} with a particular outcome, namely:
+            %
+            \begin{itemize}
+                \item a \alert{class}, for \alert{classification} problems
+                \item a \alert{constant}, or a simpler function, for \alert{regression} problems
+            \end{itemize}
+
+            \item \alert{one rule} generated describing \alert{for each region} and its corresponding outcome
+        \end{enumerate}
+    \end{block}
 \end{frame}
 
 \subsection{Usage Examples}
 
-\begin{frame}{Iris (classification)}
-    \begin{itemize}
-        \item 
-    \end{itemize}
+\begin{frame}[allowframebreaks]{Iris (classification)}\centering
+
+    \includegraphics[width=.6\linewidth]{figures/CLA/iris-samples.pdf}
+
+    \framebreak
+
+    \pythonimport[basicstyle=\tiny\ttfamily]{listings/iris.py}
+
+    \framebreak
+
+    \input{figures/fig-comparison.tex}
+
+    \framebreak
+
+    \input{tables/tab-comparison.tex}
+
+    \framebreak
+
+    \prologimport[caption={Rules extracted by \real{} from MLP}]{listings/iris-real.pl}
+    \prologimport[caption={Rules extracted by \real{} from 5-NN}]{listings/iris-trepan.pl}
+
 \end{frame}
 
 \begin{frame}{Combined Cycle Power Plant (regression)}

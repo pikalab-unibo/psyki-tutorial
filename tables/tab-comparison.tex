@@ -1,0 +1,26 @@
+% !TeX root = ../ise-lab-ske.tex
+
+\begin{table}
+    % \caption{Comparison between accuracy and fidelity measurements with different combinations of extraction algorithms and underlying models applied to the Iris data set}
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{ll@{\hskip 0.8in}lll}
+            \multicolumn{2}{l}{\textbf{Predictor}} & 		
+            \multicolumn{3}{@{}l}{\textbf{Extractor}}\\
+            \textbf{Type} & \textbf{Accuracy} & \textbf{Algorithm} & \textbf{Fidelity} & \textbf{Accuracy} \\
+            \hline\hline
+            5-NN & 0.94 & \real{} & 0.98 & 0.95 \\
+            & & \trepan{} & 0.95 & 0.95 \\
+            & & \cart{} & 0.95 & 0.95 \\
+            \hline
+            MLP & 0.98 & \real{} & 0.98 & 0.95 \\
+            & & \trepan{} & 0.98 & 0.92 \\
+            & & \cart{} & 0.98 & 0.92 \\
+            % \hline
+            % DT (binarised features) & 0.98 & \real{} & 0.98 & 0.97 \\
+            % & & \trepan{} & 0.98 & 0.92 \\
+            % & & \cart{} & 1.00 & 0.98 \\
+            % \hline
+            % DT (continuous features) & 0.95 & \cart{} & 1.00 & 0.95 \\
+        \end{tabular}
+    \end{adjustbox}
+\end{table}
