@@ -2,7 +2,7 @@
 	\centering
 	\begin{tabular}{c|ccc}
 		Predictor & \multicolumn{3}{c}{Extractor} \\
-		\midrule
+		\hline\hline
 		& \iter{} & \gridex{} & \cart{} \\
 		\subfloat[LR.]{
 			\includegraphics[width=0.215\linewidth]{figures/REG/bb-lr.pdf}
@@ -36,26 +36,6 @@
 		\subfloat[]{
 			\includegraphics[width=0.2\linewidth]{figures/REG/cart-mlp.pdf}
 			\label{fig:cart-mlp}
-		} \\		
-		%&		
-		\subfloat[DT.]{
-			\includegraphics[width=0.2\linewidth]{figures/REG/bb-dt.pdf}
-			\label{fig:bb-dt}
-		} &
-		\subfloat[]{
-			\includegraphics[width=0.2\linewidth]{figures/REG/iter-dt.pdf}
-			\label{fig:iter-dt}
-		} &
-		\subfloat[]{
-			\includegraphics[width=0.2\linewidth]{figures/REG/gridex-dt.pdf}
-			\label{fig:gridex-dt}
-		} &
-		\subfloat[]{
-			\includegraphics[width=0.2\linewidth]{figures/REG/cart-dt.pdf}
-			\label{fig:cart-dt}
-		}\\
+		} 
 	\end{tabular}
-
-	\caption{Comparison between CCPP data set output predictions provided by the algorithms implemented in \psyke{}. Only the two most relevant features are reported---i.e., ambient temperature and exhaust vacuum.}
-	\label{fig:ccppAll}
 \end{figure}

@@ -12,9 +12,9 @@
 \usepackage{ise-lab-common}
 \usepackage{ise-lab-ske}
 % version
-\newcommand{\versionmajor}{0}
-\newcommand{\versionminor}{1}
-\newcommand{\versionpatch}{1}
+\newcommand{\versionmajor}{1}
+\newcommand{\versionminor}{0}
+\newcommand{\versionpatch}{0}
 \newcommand{\version}{\versionmajor.\versionminor.\versionpatch}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title[\currentLab{} -- XAI via SKE]{
@@ -462,9 +462,7 @@
         \begin{column}{.43\linewidth}
             \includegraphics[width=\linewidth]{figures/nn-iris.png}
         \end{column}
-        \hfill
         $\rightarrow$
-        \hfill
         \begin{column}{.53\linewidth}\small
             \[ 
                 \begin{array}{l}
@@ -811,14 +809,32 @@
     \framebreak
 
     \prologimport[caption={Rules extracted by \real{} from MLP}]{listings/iris-real.pl}
+
+    \framebreak 
+
     \prologimport[caption={Rules extracted by \real{} from 5-NN}]{listings/iris-trepan.pl}
 
 \end{frame}
 
-\begin{frame}{Combined Cycle Power Plant (regression)}
-    \begin{itemize}
-        \item 
-    \end{itemize}
+\begin{frame}[allowframebreaks]{Combined Cycle Power Plant (regression)}\centering
+    \includegraphics[width=.6\linewidth]{figures/REG/ccpp-samples.pdf}
+
+    \framebreak
+
+    \pythonimport[basicstyle=\tiny\ttfamily]{listings/ccpp.py}
+
+    \framebreak
+
+    \input{figures/fig-comparison-reg.tex}
+
+    \framebreak
+
+    \input{tables/tab-comparison-reg.tex}
+
+    \framebreak
+
+    \prologimport[caption={Rules extracted for a regression problem}]{listings/ccpp-iter.pl}
+
 \end{frame}
 
 %===============================================================================
