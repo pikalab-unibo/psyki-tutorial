@@ -13,8 +13,8 @@
 \usepackage{ise-lab-ske}
 % version
 \newcommand{\versionmajor}{1}
-\newcommand{\versionminor}{0}
-\newcommand{\versionpatch}{1}
+\newcommand{\versionminor}{2}
+\newcommand{\versionpatch}{0}
 \newcommand{\version}{\versionmajor.\versionminor.\versionpatch}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title[\currentLab{} -- XAI via SKE]{
@@ -592,10 +592,8 @@
     \end{description}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Examples of methods and their classification}
-    \begin{itemize}
-        \item \textbf{\cart}:\ccite{breiman1984classification}: classification and regression trees (a.k.a. ``ordinary'' decision trees)
-        %
+\begin{frame}[allowframebreaks]{Examples of methods and their classification -- \cart}
+    \begin{block}{\textbf{\cart}:\ccite{breiman1984classification} classification and regression trees}
         \begin{itemize}
             \item \textbf{translucency:} pedagogical
             \item \textbf{target AI task:} classification OR regression
@@ -603,10 +601,33 @@
             \item \textbf{shape:} decision tree
             \item \textbf{expressiveness:} propositional
         \end{itemize}
+    \end{block}
 
-        \framebreak
+    \framebreak
 
-        \item \textbf{\gridex}:\ccite{gridex-extraamas2021} grid extractor
+    \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{figures/dt-kyphosis.png}
+        \caption{An example decision tree estimating the probability of kyphosis after spinal surgery, given the \emph{age} of the patient and the vertebra at which surgery was \emph{start}ed \cite{wiki:dt-learning}. Notice that all decision trees subtend a partition of the input space, and that those trees themselves provide intelligible representations of \emph{how} predictions are attained.}
+        \label{fig:dt-example}
+    \end{figure}
+
+    \framebreak
+
+    \begin{exampleblock}{Using \cart{} for SKE}
+        \begin{enumerate}
+            \item \alert{generate} a `fake' dataset by feeding the predictor undergoing SKE
+            \item\label{step:dt-train} \alert{train} a decision tree on the `fake' dataset
+            \item compute \alert{fidelity} and \alert{repeat} step \ref{step:dt-train} until satisfied
+            \item \alert{[opt.]} rewrite the tree as a \alert{list of rules}
+        \end{enumerate}
+    \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Examples of methods and their classification -- \gridex}
+
+    \begin{block}{\textbf{\gridex}:\ccite{gridex-extraamas2021} grid extractor}
         %
         \begin{itemize}
             \item \textbf{translucency:} pedagogical
@@ -615,10 +636,40 @@
             \item \textbf{shape:} rule list
             \item \textbf{expressiveness:} propositional
         \end{itemize}
+    \end{block}
 
-        \framebreak
+    \input{figures/figure-gridex-partitioning.tex}
 
-        \item \textbf{\refann}:\ccite{setiono2002extraction} rule extraction from function approximating neural networks 
+    \framebreak
+
+    \begin{exampleblock}{Using \gridex{} for SKE}
+        \begin{enumerate}
+            \item \alert{partition} the input space into $p_1^n$ hypercubes
+            %
+            \begin{itemize}
+                \item evenly splitting the $n$ dimensions into $p_1$ bins
+            \end{itemize}
+            \item \alert{partition} each non empty-region into $p_2^n$ hypercubes
+            %
+            \begin{itemize}
+                \item evenly splitting the $n$ dimensions into $p_2$ bins
+            \end{itemize}
+            \item \alert{repeat} the splitting arbitrarily
+            \item assign a \alert{prediction} with each non-empty partition (e.g. average value)
+            \item write an \alert{if-then rule} for each non-empty partition:
+            %
+            \begin{itemize}
+                \item \emph{if}: expressions delimiting the partition
+                \item \emph{then}: prediction of that partition
+            \end{itemize}
+        \end{enumerate}
+    \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Examples of methods and their classification -- \refann}
+
+    \begin{block}{\textbf{\refann}:\ccite{setiono2002extraction} rule extraction from function approximating NN}
         %
         \begin{itemize}
             \item \textbf{translucency:} decompositional (3-layered NN)
@@ -627,7 +678,43 @@
             \item \textbf{shape:} rule list
             \item \textbf{expressiveness:} propositional
         \end{itemize}
-    \end{itemize}
+    \end{block}
+
+    \framebreak
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=.6\linewidth]{figures/3mlp.png}
+        \caption{An example 3-layered multi-layer perceptron (MLP)}
+        \label{fig:3mlp-example}
+    \end{figure}
+
+    \framebreak
+
+    \begin{exampleblock}{Using \refann{} for SKE}
+        \begin{enumerate}
+            \item \alert{prune} the network's hidden units and input neurons
+            \item approximate the hidden units' activation function with a \alert{2-steps-wise} linear function
+            \item approximate the output units' activation function with a \alert{3- or 5-step-wise} linear function
+            \item rewrite each output neuron as a \alert{linear combination} of the input neuron
+            \item rewrite the linear combinations as rules
+            %
+            \begin{itemize}
+                \item hence attaining a \alert{list of rules}
+            \end{itemize}
+        \end{enumerate}
+    \end{exampleblock}
+
+    \begin{figure}\centering
+        \includegraphics[width=.6\linewidth]{figures/refann/2-steps.png}
+        \caption{(from \cite{setiono2002extraction}) The $tanh(x)$ function (solid curve) for $x \in [0,x_m]$ is approximated by a 2-piece linear function (dashed lines)}
+    \end{figure}
+
+    \begin{figure}\centering
+        \includegraphics[width=.6\linewidth]{figures/refann/3-steps.png}
+        \caption{(from \cite{setiono2002extraction}) The $tanh(x)$ function (solid curve) for $x \in [0,x_m]$ is approximated by a 3-piece linear function (dashed lines)}
+    \end{figure}
+    
 \end{frame}
 
 %===============================================================================
