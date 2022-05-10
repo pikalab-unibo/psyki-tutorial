@@ -14,7 +14,7 @@
 % version
 \newcommand{\versionmajor}{1}
 \newcommand{\versionminor}{0}
-\newcommand{\versionpatch}{0}
+\newcommand{\versionpatch}{1}
 \newcommand{\version}{\versionmajor.\versionminor.\versionpatch}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title[\currentLab{} -- XAI via SKE]{
@@ -396,8 +396,10 @@
     In the particular case of ML-based AI:
     %
     \begin{center}
-        \includegraphics[width=.5\linewidth]{figures/global.pdf}
+        \includegraphics[width=\linewidth]{figures/global.pdf}
     \end{center}
+    %
+    \framebreak
     %
     \begin{itemize}
         \item we need to explain a model $M$
@@ -493,7 +495,7 @@
     According to \cite{Gelder90}, \alert{symbolic} representations of knowledge
     %
     \begin{itemize}
-        \item involve a \alert{set of symbols},
+        \item involves a \alert{set of symbols},
         \item which can be combined (e.g., concatenated) in (possibly) \alert{infinitely many} ways, 
         \item following precise \alert{syntactical} rules, and
         \item where both elementary symbols and any admissible combination of them can be assigned with \alert{meaning}
@@ -592,7 +594,7 @@
 
 \begin{frame}[allowframebreaks]{Examples of methods and their classification}
     \begin{itemize}
-        \item \textbf{CART}:\ccite{breiman1984classification}: classification and regression trees (a.k.a. ``ordinary'' decision trees)
+        \item \textbf{\cart}:\ccite{breiman1984classification}: classification and regression trees (a.k.a. ``ordinary'' decision trees)
         %
         \begin{itemize}
             \item \textbf{translucency:} pedagogical
@@ -604,7 +606,7 @@
 
         \framebreak
 
-        \item \textbf{Gridex}:\ccite{gridex-extraamas2021} grid extractor
+        \item \textbf{\gridex}:\ccite{gridex-extraamas2021} grid extractor
         %
         \begin{itemize}
             \item \textbf{translucency:} pedagogical
@@ -616,7 +618,7 @@
 
         \framebreak
 
-        \item \textbf{REFANN}:\ccite{setiono2002extraction} rule extraction from function approximating neural networks 
+        \item \textbf{\refann}:\ccite{setiono2002extraction} rule extraction from function approximating neural networks 
         %
         \begin{itemize}
             \item \textbf{translucency:} decompositional (3-layered NN)
