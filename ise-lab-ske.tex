@@ -11,23 +11,30 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{ise-lab-common}
 \usepackage{ise-lab-ske}
-% version
-\newcommand{\versionmajor}{1}
-\newcommand{\versionminor}{2}
-\newcommand{\versionpatch}{1}
-\newcommand{\version}{\versionmajor.\versionminor.\versionpatch}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title[\currentLab{} -- XAI via SKE]{
-    eXplainable Artificial Intelligence via Symbolic Knowledge Extraction
+\title[SKE via \psyke{}]{Symbolic Knowledge Extraction via \psyke{}}
+%
+\subtitle{A tutorial}
+%
+\author[\sspeaker{\gcShort} et al.]{
+    \speaker{\gcFull}$^1$ \and Matteo Magnini$^1$ \and Federico Sabbatini$^2$
+    \\
+    \gcEmail \and \ttemail{matteo.magnini@unibo.it} \and \ttemail{f.sabbatini1@campus.uniurb.it}
 }
 %
-\subtitle{\courseName{} / Module \moduleN{} (\courseAcronym)}
+\institute[\uniboShort, UniURB]{
+    $^{1}$ \disi{} (\disiShort)\\\unibo, Cesena, Italy
+    \\\medskip
+    $^{2}$ Dipartimento di Scienze Pure e Applicate (DiSPeA)\\Università di Urbino, Urbino, Italy
+}
 %
-\author[\sspeaker{\gcShort}]{\speaker{\gcFull} \\ \gcEmail}
-%
-\institute[\disiShort, \uniboShort]{\disi{} (\disiShort)\\\unibo}
-%
-\date[A.Y. \academicYear{} (v.\ \version)]{Academic Year \academicYear{}\\(version \version)}
+\date[PRIMA 2022]{
+    $24^{th}$ International Conference on 
+    \\
+    Principles and Practice of Multi-Agent Systems
+    \\
+    November 16, 2022
+}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -46,414 +53,34 @@
 %%/////////
 
 %===============================================================================
-\section{Motivation \& Context}
-%===============================================================================
-
-\begin{frame}{Context}
-    \begin{itemize}
-        \item Pervasive \alert{adoption} of AI- and ML-powered solution world-wide
-        %
-        \begin{itemize}
-            \item for \alert{automation} and decision support
-        \end{itemize}
-        
-        \vfill
-        
-        \item[$\Rightarrow$] Several activities are (partially?) \alert{delegated} to intelligent machines
-        %
-        \begin{itemize}
-            \item[!] even activities from critical domains: finance, health care, etc
-        \end{itemize}
-        
-        \vfill
-        
-        \item Especially in ML, we let machines learn specific tasks from data
-        %
-        \begin{itemize}
-            \item through the production of \alert{numeric} predictors, a.k.a. \alert{black-boxes}
-            \item instead of programming such tasks ourselves
-        \end{itemize}
-        
-        \vfill
-        
-        \item Unfortunately, black-boxes tend to be inherently
-        %
-        \begin{itemize}
-            \item \alert{opaque} w.r.t. the knowledge they acquire from data\ccite{Lipton2018}
-            \item \alert{sub-optimal} in performance as they are trained to minimise errors
-        \end{itemize}
-        
-    \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{Motivation}
-    \alert{Opaqueness} of ML-based predictors brings several \alert{drawbacks}\ccite{guidotti2018survey,Lipton2018}:
-    %
-    \vfill
-    %
-    \begin{itemize}
-        \item difficulty in \alert{understanding} what a black-box has learned from data
-        %
-        \begin{itemize}
-            \item[e.g.] ``snowy background'' problem\ccite{Ribeiro0G16}
-        \end{itemize}
-        
-        \vfill
-        
-        \item difficulty in spotting ``\alert{bugs}'' in what a numeric predictor has learned
-        %
-        \begin{itemize}
-            \item because such knowledge is not explicitly represented
-        \end{itemize}
-        
-        \vfill
-        
-        \item several blatant \alert{failures} of ML-based systems reported so far
-        %
-        \begin{itemize}
-            \item[e.g.] black people classified as gorillas \ccite{crawford2016artificial}
-            \item[e.g.] wolves classified because of snowy background \ccite{Ribeiro0G16}
-            \item[e.g.] unfair decisions in automated legal systems \ccite{wexler2017computer}
-        \end{itemize}
-        
-        \vfill
-        
-        \item lawmakers recognised citizens' \alert{right} to meaningful \alert{explanations}\ccite{Selbst2017} 
-        %
-        \begin{itemize}
-            \item about the \alert{logic} behind automated decision making
-            \item[e.g.] in General Data Protection Regulation (\alert{GDPR}) \ccite{gdpr}
-        \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}[c]{The problem with ML-based AI}
-    \centering
-    
-    \begin{exampleblock}{Trustworthiness}
-        \centering
-        How can we \alert{trust} machines we do not fully \alert{control}?
-    \end{exampleblock}
-    
-    \vfill$\downarrow$\vfill
-    
-    \begin{block}{Controllability}
-        \centering
-        How can we \alert{control} machines we do not fully \alert{understand}?
-    \end{block}
-    
-    \vfill$\downarrow$\vfill
-    
-    \begin{alertblock}{Understandability}
-        \centering
-        How can we \alert{understand} distributed, \alert{numeric} representations of knowledge?
-    \end{alertblock}
-    
-\end{frame}
-
-\begin{frame}{The eXplanable AI (XAI) approach\ccite{Gunning2016}}
-
-    The \alert{XAI} community is nowadays facing such understandability issues
-
-    \vfill
-    
-    \begin{center}
-        \includegraphics[width=\linewidth]{figures/xai-concept.pdf}
-    \end{center}
-\end{frame}
-
-%===============================================================================
 \section{Background}
 %===============================================================================
 
-\subsection{Overview on XAI}
-
-\begin{frame}[allowframebreaks]{Explain What?}
-    \begin{block}{Most efforts are devoted to \textbf{supervised} ML, and in particular:}
-        \begin{itemize}
-            \item specific sorts of \alert{tasks}, e.g. classification and regression
-            
-            \item specific sorts of \alert{data}, e.g. images, text, or tables 
-            
-            \item specific sorts of \alert{predictors}, e.g. neural networks, SVM
-            %
-            \begin{itemize}
-                \item[ie] essentially, functions of the form $f: \mathcal{X} \subseteq \mathbb{R}^n \rightarrow \mathcal{Y} \subseteq \mathbb{R}^m$
-            \end{itemize}
-        \end{itemize}
-    \end{block}
-    
-    \framebreak
-
-    Interpretability--Predictivity trade-off:
-    %
-    \begin{figure}
-        \centering
-        \includegraphics[width=.7\linewidth]{figures/interpretability-performance-tradeoff.pdf}
-    \end{figure}
-
-    \framebreak
-
-    \begin{alertblock}{Conventionally\ldots}
-        \begin{itemize}
-            \item \ldots (generalised) linear models, or decision trees/rules are \alert{considered} interpretable
-            \item \ldots other kinds of predictors are considered \alert{poorly} interpretable
-            %
-            \begin{itemize}
-                \item hence needing \alert{explanations}
-            \end{itemize}
-        \end{itemize}
-    \end{alertblock}
-    
-\end{frame}
-
-\begin{frame}[allowframebreaks]{Global vs. Local Explanations}
-    \begin{block}{Global Explanation}
-        \begin{itemize}
-            \item How does a predictor produces its outcomes in general?
-            %
-            \begin{itemize}
-                \item[eg] how does a neural network classify animals?
-            \end{itemize}
-        \end{itemize}
-    \end{block}
-
-    \begin{block}{Local Explanation}
-        \begin{itemize}
-            \item How did a predictor produce a particular outcome?
-            %
-            \begin{itemize}
-                \item[eg] why did the neural network classify a cat?
-            \end{itemize}
-        \end{itemize}
-    \end{block}
-
-    \framebreak
-
-    \begin{alertblock}{About the global/local dichotomy}
-        \begin{itemize}
-            \item firstly introduced in \cite{Ribeiro0G16}
-            \item along with \lime{}, i.e. one of the most successful XAI techniques
-        \end{itemize}
-    \end{alertblock}
-
-    \framebreak
-
-    \begin{figure}
-        \centering
-        \includegraphics[width=.6\linewidth]{figures/lime.png}
-        \caption{\input{figures/lime.tex}}
-    \end{figure}
-\end{frame}
-
-\begin{frame}[allowframebreaks]{Overview on XAI approaches}
-    Four major approaches, according to \cite{guidotti2018survey}:
-    %
-    \begin{center}
-        \includegraphics[width=.8\linewidth]{figures/open-bb.png}
-    \end{center}
-
-    \begin{block}{About notation}
-        \begin{itemize}
-            \item ``model'' $\approx$ ``predictor''
-        \end{itemize}
-    \end{block}
-    
-    \framebreak
-
-    \begin{block}{Model Explanation ($\approx$ global explanation)}
-        \begin{description}
-            \item[explanation] $\approx$ interpretable predictor trained to mimic the one to be explained 
-            %
-            \begin{itemize}
-                \item w.r.t. the entire input space
-                %
-                \begin{itemize}
-                    \item[eg] surrogate models (e.g. decision trees)
-                \end{itemize}
-            \end{itemize}
-        \end{description}
-    \end{block}
-    %
-    \begin{center}
-        \includegraphics[width=.8\linewidth]{figures/model-explanation.png}
-    \end{center}
-
-    \framebreak
-
-    \begin{block}{Outcome Explanation ($\approx$ local explanation)}
-        \begin{description}
-            \item[explanation] $\approx$ interpretable predictor trained to mimic the one to be explained
-            %
-            \begin{itemize}
-                \item w.r.t. a small portion of the input space
-                %
-                \begin{itemize}
-                    \item[eg] saliency maps (e.g. \lime{}\ccite{Ribeiro0G16}, SHAP\ccite{LundbergL2017})
-                \end{itemize}
-            \end{itemize}
-        \end{description}
-    \end{block}
-    %
-    \begin{center}
-        \includegraphics[width=.8\linewidth]{figures/outcome-explanation.png}
-    \end{center}
-
-    \framebreak
-
-    \begin{block}{Model Inspection}
-        \begin{description}
-            \item[explanation] $\approx$ representation summarising the behaviour of the predictor to be explained 
-            %
-            \begin{itemize}
-                \item w.r.t. a given portion of the input space (or, possibly, all of it)
-                %
-                \begin{itemize}
-                    \item[eg] feature importance, sensitivity analysis
-                \end{itemize}
-            \end{itemize}
-        \end{description}
-    \end{block}
-    %
-    \begin{center}
-        \includegraphics[width=.8\linewidth]{figures/model-inspection.png}
-    \end{center}
-
-    \framebreak
-
-    \begin{block}{Transparent Box Design}
-        \begin{itemize}
-            \item just train an interpretable predictor and look at it
-        \end{itemize}
-    \end{block}
-    %
-    \begin{center}
-        \includegraphics[width=.8\linewidth]{figures/transparent-box-design.png}
-    \end{center}
-\end{frame}
-
-\subsection{Interpretation vs. Explanation}
-
-\begin{frame}{Interpretation or Explanation?}
-
-    The two terms are \alert{not} interchangeable
-    %
-    \begin{itemize}
-        \item \ldots despite they are often used interchangeably
-    \end{itemize}
-
-    \vfill
-
-    \begin{block}{Insights}
-        \begin{description}
-            \item[interpretation] $\approx$ binding objects with meaning
-            %
-            \begin{itemize}
-                \item that's what the human mind does
-            \end{itemize}
-
-            \item[explanation] $\approx$ eliciting relevant aspects of objects (to ease their interpretation)
-        \end{description}
-    \end{block}
-\end{frame}
-
-\begin{frame}{The Role of Representations}
-
-    \begin{center}
-        \includegraphics[width=.7\linewidth]{figures/pipe.jpg}
-    \end{center}
-    %
-    \begin{itemize}
-        \item[!] this is just a \alert{representation} of a pipe
-    \end{itemize}
-
-\end{frame}
-
-\begin{frame}[allowframebreaks]{An abstract framework for XAI\ccite{agentbasedxai-extraamas2020}}
-
-    \begin{center}
-        \includegraphics[width=.5\linewidth]{figures/framework.pdf}
-    \end{center}
-    %
-    \begin{itemize}
-        \item[$X$] object to be explained
-        \item[$A$] observer agent
-        \item[$I_A(\cdot)$] a function ``measuring'' the ``degree of interpretability'' of $X$, w.r.t. $A$
-        \item[$E(\cdot)$] an \alert{explanation} function, mapping objects into (different) objects      
-        \item[$X'$] the \alert{result} of the explanation, i.e. a \alert{more-interpretable} object
-    \end{itemize}
-    
-    \begin{block}{Key points}
-        \begin{itemize}
-            \item interpretation is \alert{subjective}
-            \item explanation is an operation transforming poorly interpretable objects into more-interpretable ones
-            \item `interpretability' does not need to be measurable (only comparisons matter)
-        \end{itemize}
-    \end{block}
-
-    \framebreak
-
-    In the particular case of ML-based AI:
-    %
-    \begin{center}
-        \includegraphics[width=\linewidth]{figures/global.pdf}
-    \end{center}
-    %
-    \framebreak
-    %
-    \begin{itemize}
-        \item we need to explain a model $M$
-        %
-        \begin{itemize}
-            \item having a poorly interpretable \alert{representation} $R$ (w.r.t. $A$)
-        \end{itemize}
-
-        \item explanation produces another model $M'$
-        %
-        \begin{itemize}
-            \item having an interpretable \alert{representation} $R'$ (w.r.t. $A$)
-        \end{itemize}
-
-        \item performance difference among $M$ and $M'$ (i.e. $\Delta f(M, M')$) must be small ($< \delta$)
-        %
-        \begin{itemize}
-            \item or, dually, $M'$ must have an high \alert{fidelity} w.r.t. $M$
-        \end{itemize}
-    \end{itemize}
-
-    \begin{block}{Key points}
-        \begin{itemize}
-            \item explanation $\approx$ search of a \alert{surrogate} interpretable model
-            \item \alert{representation} is important as much as explanation
-            \item explanation must maximise \alert{fidelity}
-        \end{itemize}
-    \end{block}
-
-\end{frame}
-
-\subsection{Explanations via Symbolic Knowledge Extraction}
-
-\begin{frame}[allowframebreaks]{Overview}
+\begin{frame}[allowframebreaks]{Symbolic Knowledge Extraction}
     \begin{columns}
         \begin{column}{0.19\linewidth}
             \includegraphics[width=\linewidth]{figures/ske.pdf}
         \end{column}
         \hfill
         \begin{column}{0.8\linewidth}
-            \begin{block}{Insight}
-                \begin{itemize}
-                    \item search of a \alert{surrogate} interpretable model\ldots
-                    \medskip
-                    \item \ldots consisting of \alert{symbolic knowledge}
-                \end{itemize}
-            \end{block}
+            Key insights:
+            %
+            \medskip
+            %
+            \begin{itemize}
+                \item Explaining \alert{supervised ML} predictors\ldots
+                \medskip
+                \item \ldots by search of a \alert{surrogate} interpretable model\ldots
+                \medskip
+                \item \ldots consisting of \alert{symbolic knowledge}
+            \end{itemize}
         \end{column}
     \end{columns}
 
     \framebreak
 
-    \begin{block}{Definition: Symbolic Knowledge Extraction (SKE)}\centering\itshape
-        Any \emph{algorithmic} procedure accepting \emph{trained} sub-symbolic predictors as input and producing \emph{symbolic} knowledge as output, in such a way that the extracted knowledge reflects the behaviour of the predictor with high \emph{fidelity}.
+    \begin{block}{Definition}\centering\itshape
+        Any \alert{algorithmic} procedure accepting \alert{trained} sub-symbolic predictors as input and producing \alert{symbolic} knowledge as output, in such a way that the extracted knowledge reflects the behaviour of the predictor with high \alert{fidelity}.
     \end{block}
 
     \framebreak
@@ -540,8 +167,8 @@
         \item[target AI task] for the predictor undergoing extraction
         %
         \begin{description}
-            \item[classification] i.e., $f: \mathcal{X} \subseteq \mathbb{R}^n \rightarrow \mathcal{Y}$ s.t. $|\mathcal{Y}| = k$
-            \item[regression] i.e., $f: \mathcal{X} \subseteq \mathbb{R}^n \rightarrow \mathcal{Y} \subseteq \mathbb{R}^m$     
+            \item[classification] i.e., finite amount of possible predictions
+            \item[regression] i.e., continuous predictions
         \end{description} 
 
         \medskip
@@ -773,7 +400,7 @@
 \frametitle{API Design}
 
     \begin{center}
-        \includegraphics[width=.9\linewidth]{figures/extractor-api.pdf}
+        \includegraphics[width=.7\linewidth]{figures/extractor-api.pdf}
     \end{center}
 
     \framebreak
