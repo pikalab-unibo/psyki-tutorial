@@ -5,7 +5,7 @@ on:
       - main
       - master
 env:
-  LATEX_ROOT: ise-lab-ske
+  LATEX_ROOT: psyke-tutorial
 jobs:
   compile:
     runs-on: ubuntu-latest
