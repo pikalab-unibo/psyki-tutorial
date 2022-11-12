@@ -428,7 +428,7 @@
 \end{frame}
 
 %===============================================================================
-\section{A Platform for Symbolic Knowledge Extraction}
+\section{\psyke}
 %===============================================================================
 
 \begin{frame}[allowframebreaks]
@@ -587,53 +587,98 @@
     \end{block}
 \end{frame}
 
-\subsection{Usage Examples}
+%===============================================================================
+\section{Tutorial}
+%===============================================================================
 
-\begin{frame}[allowframebreaks]{Iris (classification)}\centering
+\begin{frame}{Tutorial}
 
-    \includegraphics[width=.6\linewidth]{figures/CLA/iris-samples.pdf}
+    Two ways to reproduce the tutorial:
+    
+    \begin{block}{GitHub Repository (long way)}\centering
+        \alert{\url{https://github.com/pikalab-unibo/prima-tutorial-2022}}
+    \end{block}
 
-    \framebreak
-
-    \pythonimport[basicstyle=\tiny\ttfamily]{listings/iris.py}
-
-    \framebreak
-
-    \input{figures/fig-comparison.tex}
-
-    \framebreak
-
-    \input{tables/tab-comparison.tex}
-
-    \framebreak
-
-    \prologimport[caption={Rules extracted by \real{} from MLP}]{listings/iris-real.pl}
-
-    \framebreak 
-
-    \prologimport[caption={Rules extracted by \real{} from 5-NN}]{listings/iris-trepan.pl}
-
+    \begin{block}{DockerHub Images (quick way)}\centering
+        \alert{\url{https://hub.docker.com/r/pikalab/prima-tutorial-2022/tags}}
+    \end{block}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Combined Cycle Power Plant (regression)}\centering
-    \includegraphics[width=.6\linewidth]{figures/REG/ccpp-samples.pdf}
+\subsection{From GitHub}
 
-    \framebreak
+\begin{frame}[allowframebreaks]{How to set the tutorial up from GitHub}
 
-    \pythonimport[basicstyle=\tiny\ttfamily]{listings/ccpp.py}
+    \begin{block}{Enviromental pre-requisites}
+        \begin{itemize}
+            \item Python \alert{\texttt{3.9.x}}
+            \item JDK \alert{$\geq$ \texttt{11}}
+            \item Git
+        \end{itemize}
+    \end{block}
 
-    \framebreak
+    \begin{enumerate}
+        \item \texttt{git clone https://github.com/pikalab-unibo/prima-tutorial-2022}
+        \item \texttt{cd prima-tutorial-2022}
+        \item \texttt{pip install -r requirements.txt}
+        \item \texttt{jupyter notebook}
+        \framebreak
+        \item Your browser should automatically open showing the following page:
+        %
+        \begin{center}
+            \includegraphics[width=.7\linewidth]{figures/jupyter-git.png}
+        \end{center}
+        \item open the \texttt{psyke-tutorial.ipynb} notebook
+        \item listen to the speaker presenting the tutorial =)
+    \end{enumerate}
+\end{frame}
 
-    \input{figures/fig-comparison-reg.tex}
+\subsection{From DockerHub}
 
-    \framebreak
+\begin{frame}[allowframebreaks]{How to set the tutorial up via Docker}
 
-    \input{tables/tab-comparison-reg.tex}
+    \begin{block}{Enviromental pre-requisites}
+        \begin{itemize}
+            \item Python \alert{\texttt{3.9.x}}
+            \item JDK \alert{$\geq$ \texttt{11}}
+            \item Git
+            \item Docker
+        \end{itemize}
+    \end{block}
 
-    \framebreak
-
-    \prologimport[caption={Rules extracted for a regression problem}]{listings/ccpp-iter.pl}
-
+    \begin{enumerate}
+        \item \texttt{DOCKER\_IMAGE=}$\begin{cases}
+            \texttt{pikalab/prima-tutorial-2022:latest} & \text{on most computers}
+            \\
+            \texttt{pikalab/prima-tutorial-2022:latest\alert{-apple-m1}} & \text{on Apple M1 computers}
+        \end{cases}$
+        \item \texttt{docker pull \$DOCKER\_IMAGE}
+        %
+        \begin{itemize}
+            \item in case of lacking Internet access:
+            %
+            \begin{center}\ttfamily
+                docker image load -i /path/to/local/image/file.tar
+            \end{center}
+        \end{itemize}
+        \item \texttt{docker run -it --rm --name prima-tutorial-ske-ski -p 8888:8888 \$DOCKER\_IMAGE}
+        \item Some textual output such as the following one should appear:
+        %
+        \lstinputlisting[basicstyle=\tiny\ttfamily]{listings/docker-logs.txt}
+        \framebreak
+        \item Copy-paste into your browser any link of the form: 
+        %
+        \begin{center}
+            \alert{\texttt{http://cb0a3641caf0:8888/?token=\textit{TOKEN}}}
+        \end{center}
+        %
+        \item Your browser should now be showing the following page:
+        %
+        \begin{center}
+            \includegraphics[width=.7\linewidth]{figures/jupyter-docker.png}
+        \end{center}
+        \item open the \texttt{psyke-tutorial.ipynb} notebook
+        \item listen to the speaker presenting the tutorial =)
+    \end{enumerate}
 \end{frame}
 
 %===============================================================================
