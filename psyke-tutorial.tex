@@ -53,6 +53,89 @@
 %%/////////
 
 %===============================================================================
+\section{What and Why}
+%===============================================================================
+
+\begin{frame}%[allowframebreaks]
+    \frametitle{What}
+
+    \alert{\psyke}: a (Python) platform for symbolic knowledge extraction
+
+    \begin{columns}
+        \begin{column}{.3\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{./figures/psyke-logo.pdf}
+        \end{column}
+        \begin{column}{.7\linewidth}
+            \begin{block}{GitHub Repository}\centering
+                \alert{\url{https://github.com/psykei/psyke-python}}
+
+                \tiny{(please star us :)}
+            \end{block}
+
+            \begin{block}{Main papers}
+                \begin{itemize}
+                    \item \cite{psyke-woa2021}
+                    \item \cite{swpsyke-extraamas2022}
+                    \item \cite{psyke-ia16}
+                \end{itemize}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[c]{Why}
+    \begin{itemize}
+        \item Pervasive adoption of \alert{sub-symbolic}, ML-based predictors in AI
+        
+        \vfill
+
+        \item Their \alert{opacity}\ccite{Lipton2018} brings \alert{drawbacks}\ccite{guidotti2018survey}:
+        %
+        \vfill
+        %
+        \begin{itemize}\small
+            \item difficulty in \alert{understanding} what a black-box has learned from data
+            %
+            \begin{itemize}\tiny
+                \item[e.g.] ``snowy background'' problem\ccite{Ribeiro0G16}
+            \end{itemize}
+            
+            \vfill
+            
+            \item difficulty in spotting ``\alert{bugs}'' in what a numeric predictor has learned
+            %
+            \begin{itemize}\tiny
+                \item because such knowledge is not explicitly represented
+            \end{itemize}
+            
+            \vfill
+            
+            \item several blatant \alert{failures} of ML-based systems reported so far
+            %
+            \begin{itemize}\tiny
+                \item[e.g.] black people classified as gorillas \ccite{crawford2016artificial}
+                \item[e.g.] wolves classified because of snowy background \ccite{Ribeiro0G16}
+                \item[e.g.] unfair decisions in automated legal systems \ccite{wexler2017computer}
+            \end{itemize}
+            
+            \vfill
+            
+            \item recognised citizens' \alert{right} to meaningful \alert{explanations}\ccite{Selbst2017} 
+            %
+            \begin{itemize}\tiny
+                \item about the \alert{logic} behind automated decision making
+                \item[e.g.] in General Data Protection Regulation (\alert{GDPR}) \ccite{gdpr}
+            \end{itemize}
+        \end{itemize}
+
+        \vfill
+
+        \item[$\rightarrow$] Need to \alert{inspect} and understand how ML predictors operate
+    \end{itemize}
+\end{frame}
+
+%===============================================================================
 \section{Background}
 %===============================================================================
 
