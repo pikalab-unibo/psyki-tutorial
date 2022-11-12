@@ -1,0 +1,48 @@
+% ISE numbering
+\labN{6}
+\usepackage[font=scriptsize]{caption}
+\usepackage{longtable}
+\usepackage{arydshln}
+\usepackage[margin=20pt]{subfig}
+\usepackage{multirow}
+\usepackage{adjustbox}
+\usepackage{stmaryrd}
+
+\AtBeginSection[]
+{
+    \begin{frame}[c,noframenumbering]\frametitle{Next in Line\ldots}
+        %    \begin{multicols}{2}
+            \tableofcontents[sectionstyle=show/shaded, subsectionstyle=show/hide, subsubsectionstyle=hide/hide]
+            %    \end{multicols}
+    \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+    \begin{frame}[c,noframenumbering]\frametitle{Next in Line\ldots}
+        %    \begin{multicols}{2}
+            \tableofcontents[sectionstyle=show/shaded, subsectionstyle=show/hide, subsubsectionstyle=hide/hide]
+            %    \end{multicols}
+    \end{frame}
+}
+
+\newcommand{\psyki}{PSyKI}
+\newcommand{\longpsyki}{Platform for Symbolic Knowledge Injection}
+\newcommand{\templatemajor}{1}
+\newcommand{\templateminor}{4}
+\newcommand{\templatepatch}{20220217}
+\newcommand{\templateversion}{\templatemajor.\templateminor.\templatepatch}
+\newcommand{\argmin}[2]{\underset{#1}{\text{argmin}} \left\{ #2 \right\}}
+\newcommand{\argmax}[2]{\underset{#1}{\text{argmax}} \left\{ #2 \right\}}
+\newcommand{\unify}[2]{\text{unify}(#1, #2)}
+\newcommand{\mgu}[2]{\text{mgu}(#1, #2)}
+\newcommand{\functor}[1]{\mathtt{#1}}
+\newcommand{\variable}[1]{\mathit{#1}}
+\newcommand{\predication}[1]{\mathit{#1}}
+\newcommand{\consdot}{\functor{~.~}}
+\newcommand{\const}[1]{\mathtt{#1}}
+\newcommand{\pred}[1]{\mathit{#1}}
+\newcommand{\var}[1]{\mathit{#1}}
+\newcommand{\scinum}[2]{$#1 \cdot 10^{#2}$}
+
+\newcommand{\ttemail}[1]{\href{mailto:#1}{\texttt{#1}}}
