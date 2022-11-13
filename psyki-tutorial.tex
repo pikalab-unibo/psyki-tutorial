@@ -220,142 +220,165 @@
     
     \framebreak
 
-    \begin{description}
-        \item[input knowledge] how is the knowledge to-be-injected represented?
+    \begin{itemize}
+        \item \alert{input knowledge} how is the knowledge to-be-injected represented?
         %
         \begin{itemize}
             \item commonly, some sub-set of first-order logic (FOL)
         \end{itemize} 
 
-        \item[target predictor] which predictors can knowledge be injected into?
+        \item \alert{target predictor} which predictors can knowledge be injected into?
         %
         \begin{itemize}
             \item mostly, neural networks
         \end{itemize} 
 
-        \item[strategy] how does injection actually work?
+        \item \alert{strategy} how does injection actually work?
         %
-        \begin{description}
-            \item[structuring] todo describe
-            \item[guided learning] todo describe
-            \item[embedding] todo describe
-        \end{description} 
+        \begin{itemize}
+            \item \alert{guided learning} the input knowledge is used to \alert{guide the training} process
+            \item \alert{structuring} the \alert{internal} composition of the predictor is \alert{(re-)structured} to reflect the input knowledge  
+            \item \alert{embedding} the input knowledge is \alert{converted} into numeric array form
+        \end{itemize} 
 
-        \item[purpose] why is knowledge injected in the first place?
+        \item \alert{purpose} why is knowledge injected in the first place?
         %
-        \begin{description}
-            \item[knowledge manipulation] todo describe
-            \item[learning support] todo describe
-        \end{description} 
+        \begin{itemize}
+            \item \alert{knowledge manipulation} improve / extend / reason about symbol knowledge---subsymbolically
+            \item \alert{learning support} improve the sub-symbolic predictor (e.g. speed, size, etc.)
+        \end{itemize} 
 
-    \end{description}
+    \end{itemize}
 \end{frame}
 
 \subsection{Focus on strategy}
 
 %/////////
-\begin{frame}[allowframebreaks]{Constraining}
+\begin{frame}[allowframebreaks]{Strategy 1: Guided Learning}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.7\linewidth]{figures/nn-gradient-descent.png}
+    \end{figure}   
     %
     \begin{itemize}
-        \item Knowledge cost factor is introduced in the loss function;
-        %
-        \item for NN the cost affects backpropagation \ccite{backpropagation} during training.
+        \item learning is essentially an \alert{optimizionation} process
+        \item \ldots often performed via \alert{gradient descent}
         %
         \begin{itemize}
-            \item[$\Rightarrow$] Predictor does not violate the prior knowledge (to a certain extent).
-        \end{itemize} 
+            \item[ie] minimising a \alert{loss function}
+        \end{itemize}
     \end{itemize}
-    
+
+    \framebreak
+
+    \begin{block}{SKI via Guided Learning}
+        \begin{enumerate}
+            \item Input knowledge is converted into a \alert{cost factor} 
+            %
+            \begin{itemize}
+                \item[ie] the more the knowledge is violated, the higher the cost
+            \end{itemize}
+            
+            \item The loss function is altered to \alert{include} that cost factor
+            %
+            \begin{itemize}
+                \item[eg] as a simple additive regularisation factor
+            \end{itemize}
+            
+            \item The predictor is then trained \alert{as usual}
+            
+            \medskip
+
+            \item[$\rightarrow$] Training minimises both the predictors' \alert{error} and \alert{inconsistency} w.r.t. knowledge
+        \end{enumerate}
+    \end{block}
+    %
     \begin{figure}
         \centering
         \includegraphics[width=0.6\textwidth]{figures/ski-constraining}
     \end{figure}
-    %
-    
-    \framebreak
-    
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.8\textwidth]{figures/nn-backprop.png}
-    \end{figure}
-
-    \framebreak
-
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.8\textwidth]{figures/nn-gradient-descent.png}
-    \end{figure}    
+     
 \end{frame}
 %/////////
 
 %/////////
-\begin{frame}[allowframebreaks]{Structuring}
-    %
-    \begin{itemize}
-        \item Inner architecture is shaped to be able to ``mimic'' the knowledge;
-        %
-        \item for NN this means \emph{ad-hoc} layers.
-        %
+\begin{frame}[allowframebreaks]{Strategy 2: Structuring}
+    \begin{block}{SKI via Guided Learning}
         \begin{itemize}
-            \item[$\Rightarrow$] Predictor directly exploits knowledge when needed.
-        \end{itemize} 
-    \end{itemize}
+            \item The predictor's inner architecture is shaped  to``mimic'' the knowledge
+            
+            \item Shaping is predictor-dependent
+            %
+            \begin{itemize}
+                \item[eg] for neural networks, this means creating \alert{ad-hoc layers}
+                %
+                \begin{itemize}
+                    \item where small groups of neurons are used to compute pieces of a formula
+                \end{itemize}
+            \end{itemize}
+
+            \medskip
+            
+            \item[$\rightarrow$] The predictor directly exploits the knowledge during inference
+        \end{itemize}
+    \end{block}
     %
     \begin{figure}
         \centering
         \includegraphics[width=0.7\textwidth]{figures/ski-structuring}
     \end{figure}
-    %
-    
-    \framebreak
-    
-   \begin{itemize}
-       \item We need to define a mapping from crispy logic rules into fuzzy continuous interpretations;
-       %
-       \item then we need to map the interpretations into ad-hoc neurons/layers.
-   \end{itemize}   
 
     \framebreak
     
-    \begin{equation*}
-        \begin{aligned}
-            \var{A}&\leftarrow\var{B}\wedge\var{C}\wedge\neg\var{D}.\\
-            \var{A}&\leftarrow\var{E}\wedge\var{F}.\\
-            \var{B}&\leftarrow\const{true}.\\
-        \end{aligned}    
-    \end{equation*}
+    Example:
     %
-    \begin{figure}
-        \centering
-        \includegraphics[height=0.5\textheight]{figures/structuring-example}
-    \end{figure}
+    \begin{columns}
+        \column{.48\linewidth}
+        \begin{equation*}
+            \begin{aligned}
+                \var{A}&\leftarrow\var{B}\wedge\var{C}\wedge\neg\var{D}.\\
+                \var{A}&\leftarrow\var{E}\wedge\var{F}.\\
+                \var{B}&\leftarrow\const{true}.\\
+            \end{aligned}    
+        \end{equation*}
+        \column{.04\linewidth}
+        \centering $\leftrightarrow$
+        \column{.48\linewidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\linewidth]{figures/structuring-example}
+        \end{figure}
+    \end{columns}
 \end{frame}
 %/////////
 
 %/////////
-\begin{frame}[allowframebreaks]{Embedding}
-    %
-    \begin{itemize}
-        \item Symbolic knowledge is embedded into a tensor form;
-        %
-        \item this is used as predictor's input data (alone or with a ``standard'' dataset).
-        %
+\begin{frame}[allowframebreaks]{Strategy 3: Embedding}
+    
+    \begin{block}{SKI via Guided Learning}
         \begin{itemize}
-            \item[$\Rightarrow$] Predictor's aim is manifold in most cases.
-        \end{itemize} 
-    \end{itemize}
+            \item Input knowledge is converted into numeric tensor(s)
+            %
+            \item These are used as the training set for an ordinary learning process
+            
+            \medskip
+            
+            \item[$\rightarrow$] The predictor is trained and used `as usual'
+        \end{itemize}
+    \end{block}
     
     \begin{figure}
         \centering
         \includegraphics[width=0.7\textwidth]{figures/ski-embedding}
     \end{figure}
-    %
+    
     \framebreak
+    
+    Example: \alert{knowledge graph embedding}\ccite{kge-survey}
     %
     \begin{itemize}
-        \item Knowledge graph embedding \ccite{kge-survey};
-        %
-        \item entities and relations are embedded into continuos vector spaces;
+        \item \alert{entities} and \alert{relations} are embedded into continuos vector spaces;
         %
         \item scoring function $f_{r}(h,t)$ defined on each fact $(h, r, t)$ to measure its plausibility;
     \end{itemize}
