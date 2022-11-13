@@ -1,0 +1,70 @@
+% !TeX spellcheck = en_GB
+% !TeX root = ../ski-extraamas-2022.tex
+
+\begin{table}
+    \centering
+    %
+    \caption{
+        Two logic formul\ae's encodings into real-valued functions (the first with 0 representing true and 1 false, vice versa in the second).
+        %
+        There, $X$ is a logic variable, while $x$ is the corresponding real-valued variable, whereas is $\bar{X}$ a tuple of logic variables.
+        %
+        Similarly, $\const{k}$ is a numeric constant, and $k$ is the corresponding real value, whereas $\const{k}_i$ is the constant denoting the $i^{th}$ class of a classification problem.
+        %
+        Finally, $\text{expr}(\bar{X})$ is an arithmetic expression involving the variables in $\bar{X}$.
+    }
+    %
+    \label{tab:lukasiewicz-fuzzification}
+    %
+    \begin{tabular}{l|r|r}
+        \textbf{Formula} & \textbf{Interpretation as penalty} & \textbf{Interpretation as truth}
+        \\
+        \hline\hline
+        $\llbracket\neg \phi\rrbracket$ & $\eta\{1 - \llbracket\phi\rrbracket\}$ & $\eta\{1 - \llbracket\phi\rrbracket\}$
+        \\
+        $\llbracket\phi  \wedge \psi\rrbracket$ &  $\eta\{max\{\llbracket\phi\rrbracket, \llbracket\psi\rrbracket\}\}$ &  $\eta\{min\{\llbracket\phi\rrbracket, \llbracket\psi\rrbracket\}\}$
+        \\
+        $\llbracket\phi  \vee \psi\rrbracket$ & $\eta\{min\{\llbracket\phi\rrbracket, \llbracket\psi\rrbracket\}\}$ & $\eta\{max\{\llbracket\phi\rrbracket, \llbracket\psi\rrbracket\}\}$
+        \\
+        $\llbracket\phi = \psi\rrbracket$ & $\eta\{|\llbracket\phi\rrbracket-\llbracket\psi\rrbracket|\}$ & $\eta\{\llbracket\neg( \phi \ne \psi )\rrbracket \}$
+        \\
+        $\llbracket\phi \ne \psi\rrbracket$ & $\llbracket \neg ( \phi = \psi )\rrbracket$ & $\eta\{|\llbracket\phi\rrbracket-\llbracket\psi\rrbracket|\}$ 
+        \\
+        $\llbracket\phi > \psi\rrbracket$  & $\eta\{1 - max\{0, \llbracket\phi\rrbracket - \llbracket\psi\rrbracket\}\} $ & $\eta\{max\{0, \llbracket\phi\rrbracket - \llbracket\psi\rrbracket\}\}$
+        \\
+        $\llbracket\phi \ge \psi\rrbracket$ & $ \llbracket(\phi > \psi) \vee (\phi = \psi)\rrbracket$ & $\eta\{\llbracket( \phi > \psi ) \vee ( \phi = \psi )\rrbracket\}$ 
+        \\
+        $\llbracket\phi < \psi\rrbracket$  &  $\llbracket \neg ( \phi \geq \psi )\rrbracket$ &  $\eta\{max\{0, \llbracket\psi\rrbracket - \llbracket\phi\rrbracket\}\}$
+        \\
+        $\llbracket\phi \le \psi\rrbracket$  & $\llbracket \neg ( \phi > \psi )\rrbracket$ & $\eta\{\llbracket( \phi < \psi ) \vee ( \phi = \psi )\rrbracket\}$
+        \\
+        $\llbracket\phi \Rightarrow \psi\rrbracket$ & $\eta\{max\{0, \llbracket\psi\rrbracket-\llbracket\phi\rrbracket\}\}$ & $\eta\{min\{1, 1- \llbracket\psi\rrbracket+\llbracket\phi\rrbracket\}\}$
+         \\
+        $\llbracket\phi \Leftarrow \psi\rrbracket$ & $\eta\{max\{0, \llbracket\phi\rrbracket-\llbracket\psi\rrbracket\}\}$ & $\eta\{min\{1, 1-\llbracket\phi\rrbracket+\llbracket\psi\rrbracket\}\}$ 
+        \\
+        $\llbracket\phi \Leftrightarrow \psi\rrbracket$ & $\eta\{max\{0, |\llbracket\phi\rrbracket-\llbracket\psi\rrbracket|\}\}$ & $\eta\{min\{1, 1-|\llbracket\phi\rrbracket-\llbracket\psi\rrbracket|\}\}$ 
+        \\
+        $\llbracket \text{expr}(\bar{X}) \rrbracket$ & $\text{expr}(\llbracket\bar{X}\rrbracket)$ & $\text{expr}(\llbracket\bar{X}\rrbracket)$
+        \\
+        $\llbracket \mathtt{true} \rrbracket$ & $0$ & $1$
+        \\
+        $\llbracket \mathtt{false} \rrbracket$ & $1$  & $0$
+        \\
+        $\llbracket X \rrbracket$ & $x$ & $x$
+        \\
+        $\llbracket \const{k} \rrbracket$ & $k$ & $k$
+        \\
+        $\llbracket \pred{p}(\bar{X}) \rrbracket^{**}$ & $\llbracket \psi_1 \vee \ldots \vee \psi_k \rrbracket$ & $\llbracket \psi_1 \vee \ldots \vee \psi_k \rrbracket$
+        \\
+        $\llbracket \pred{class}(\bar{X}, \const{y}_i) \leftarrow \psi \rrbracket$ & $\llbracket \psi \rrbracket^{*}$ & $\llbracket \psi \rrbracket^{*}$
+    \end{tabular}
+    %
+    \begin{center}\scriptsize
+        $^{*}$ encodes the penalty for the $i^{th}$ output
+        \\
+        \smallskip
+        $^{**}$ assuming predicate $p$ is defined by $k$ clauses of the form:
+        \\
+        $\pred{p}(\bar{X}) \leftarrow \psi_1,\ \ldots,\ \pred{p}(\bar{X}) \leftarrow \psi_k$
+    \end{center}
+\end{table}
