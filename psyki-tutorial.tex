@@ -632,9 +632,6 @@
 \begin{frame}[allowframebreaks]{Knowledge Injection via Network Structuring\ccite{kins-cilc2022}}
     
     \begin{block}{KINS}
-        %
-        A general SKI algorithm that does not impose constrains on the sub-symbolic predictor to enrich.
-        %
         \begin{description}
             %
             \item[purpose] $\rightarrow$ learning support;
@@ -670,8 +667,31 @@
 %/////////
 
 %/////////
-\begin{frame}[allowframebreaks]{KILL: Knowledge Injection via Lambda Layer}
-    TODO
+\begin{frame}[allowframebreaks]{Knowledge Injection via Lambda Layer\ccite{kill-woa2022}}
+    \begin{block}{KILL}
+        \begin{description}
+            %
+            \item[purpose] $\rightarrow$ learning support;
+            %
+            \item[target predictor] $\rightarrow$ neural networks;
+            %
+            \item[strategy] $\rightarrow$ guided learning;
+            %
+            \item[input logic] $\rightarrow$ stratified Datalog with negation.
+            %    
+        \end{description}        
+    \end{block}
+
+    \framebreak
+    
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{figures/kill-architecture}
+    \end{figure}
+
+    \framebreak
+    
+    \input{tables/kill-fuzzification}
 \end{frame}
 %/////////
 
