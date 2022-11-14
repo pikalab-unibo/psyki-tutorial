@@ -710,17 +710,34 @@
 
     Key components:
     %
+    \medskip
+    %
     \begin{description}
-        \item[injectior:] todo
+        \item[injector:] any entity capable of injecting knowledge into a sub-symbolic predictor
         %
         \begin{itemize}
-            \item details here
+            \item it simply alters/reconfigures the predictor\ldots
+            \item \ldots which should be trained after the injector operates
         \end{itemize}
 
-        \item[predictor:] some trained classifier/regressor from which knowledge should be extracted
-                
-        \item[formula:] 
+        \medskip
+
+        \item[predictor:] the partially-trained classifier/regressor where knowledge should be injected into
+        %
+        \begin{itemize}
+            \item untrained is ok too
+        \end{itemize}
+        
+        \medskip
+
+        \item[formula:] formal representation of the symbolic knowledge to be injected
+        %
+        \begin{itemize}
+            \item e.g. in Prolog or FOL syntax
+        \end{itemize}
     \end{description}
+
+    \framebreak
 
     \begin{block}{Unified API for SKI}
         \begin{itemize}
@@ -752,7 +769,16 @@
 
     \framebreak
 
-    Comments: TODO
+    \begin{alertblock}{Remarks}
+        \begin{itemize}
+            \item The user only needs to know:
+            %
+            \begin{itemize}
+                \item the particular injector to exploit (and its paramenters)
+                \item the particular parser to decode logic rules
+            \end{itemize}
+        \end{itemize}
+    \end{alertblock}
 \end{frame}
 
 
@@ -853,19 +879,35 @@
 
 \begin{frame}{Notable Remarks}
     \begin{itemize}
-        \item stuff
+        \item knowledge bases should express relations about input--output pairs
+        \item embedding implies extensional representation of knowledge
+        %
+        \begin{itemize}
+            \item guided learning, and structuring support intensional knowledge
+        \end{itemize}
+        \item propositional knowledge implies binarising the I/O spaces
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Current Limitations}
     \begin{itemize}
-        \item todo
+        \item support for regression is preliminary
+        \item recursive data structures are not supported
+        \item recursive clauses are not supported
+        \item extensional representation cost storage
+        %
+        \begin{itemize}
+            \item not always possible
+        \end{itemize}
+        \item guided learning works poorly with lacking data
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Future research activities}
     \begin{itemize}
-        \item todo
+        \item foundational: address recursion
+        \item practical: address regression
+        \item is SKI possible outside the NN domain?
     \end{itemize}
 \end{frame}
 
